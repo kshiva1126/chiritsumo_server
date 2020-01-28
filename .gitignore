@@ -1,0 +1,5 @@
+**/dockerbuild/db/logs/**
+!**/dockerbuild/db/logs/.gitkeep
+**/dockerbuild/nginx/logs/**
+!**/dockerbuild/nginx/logs/.gitkeep
+.env
