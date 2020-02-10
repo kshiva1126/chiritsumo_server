@@ -19,10 +19,22 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // 会員登録
-Route::post('/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/register', 'Auth\RegisterController@register');
 
 // ログイン
-Route::post('/login', 'Auth\LoginController@login')->name('login');
+Route::post('/login', 'Auth\LoginController@login');
 
 // ログアウト
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('/logout', 'Auth\LoginController@logout');
+
+// 記事投稿
+Route::post('/post', 'Api\PostController@post');
+
+// 記事編集
+Route::post('/edit', 'Api\PostController@edit');
+
+// 記事お気に入り
+Route::post('/fav', 'Api\FavoriteController@fav');
+
+// フォロウィング
+Route::post('/following', 'Api\FollowingController@following');

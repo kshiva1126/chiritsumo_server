@@ -74,6 +74,23 @@ class RegisterController extends Controller
 
     protected function registered(Request $request, $user)
     {
-        return $user;
+        $this->upload($request, $user);
+        return response($user, 201);
+    }
+
+    public function upload(Request $request, User $user)
+    {
+        $rules = [
+            'file',
+            'image',
+            'mimes:jpeg, png',
+            'dimensions:min_width=120,min_height=120,max_width=400,max_height=400',
+        ];
+        $this->validate($request, $rules);
+        if ($request->hasFile('image') && $request->file('image')->isValid([])) {
+            $filename = $request->file('image')->store('public/images');
+            $user->image_path = basename($filename);
+            $user->save();
+        }
     }
 }
