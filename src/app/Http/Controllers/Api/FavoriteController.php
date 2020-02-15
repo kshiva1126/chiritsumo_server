@@ -6,21 +6,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Favorite;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FavoriteRequest;
 
 use Illuminate\Support\Facades\DB;
 
 class FavoriteController extends Controller
 {
-    public function fav(Request $request)
+    public function fav(FavoriteRequest $request)
     {
         if (!$user = Auth::user()) {
             return response(['auth' => false], 401);
         }
-
-        $this->validate($request, [
-            'user_id' => ['required', 'integer'],
-            'post_id' => ['required', 'integer'],
-        ]);
 
         $data = $request->all();
 
@@ -31,7 +27,10 @@ class FavoriteController extends Controller
                 $delete_favo = true;
             }
         } else {
-            Favorite::create($data);
+            Favorite::create([
+                'user_id' => $user->id,
+                'post_id' => $data['post_id'],
+            ]);
         }
 
         return response([

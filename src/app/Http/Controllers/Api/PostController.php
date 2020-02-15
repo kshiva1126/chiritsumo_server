@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EditRequest;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
-    public function post(Request $request)
+    public function post(PostRequest $request)
     {
         if (!$user = Auth::user()) {
             return response(['auth' => false], 401);
@@ -31,17 +33,11 @@ class PostController extends Controller
         return response($post, 201);
     }
 
-    public function edit(Request $request)
+    public function edit(EditRequest $request)
     {
         if (!$user = Auth::user()) {
             return response(['auth' => false], 401);
         }
-
-        $this->validate($request, [
-            'post_id' => ['required', 'integer'],
-            'title' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string'],
-        ]);
 
         $data = $request->all();
 
@@ -51,5 +47,20 @@ class PostController extends Controller
         ]);
 
         return response($post, 201);
+    }
+
+    public function timeline(Request $request)
+    {
+        if (!$user = Auth::user()) {
+            return response(['auth' => false], 401);
+        }
+
+        $timelinePosts = [];
+        $followees = $user->followees;
+        foreach ($followees as $followee) {
+            $timelinePosts[] = $followee->posts;
+        }
+
+        return response($timelinePosts, 200);
     }
 }

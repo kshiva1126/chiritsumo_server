@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // 会員登録
 Route::post('/register', 'Auth\RegisterController@register');
@@ -38,3 +38,6 @@ Route::post('/fav', 'Api\FavoriteController@fav');
 
 // フォロウィング
 Route::post('/following', 'Api\FollowingController@following');
+
+// ユーザ
+Route::get('/user/{id}', 'Api\UserController@getUser');
