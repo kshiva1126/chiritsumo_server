@@ -41,3 +41,33 @@ Route::post('/following', 'Api\FollowingController@following');
 
 // ユーザ
 Route::get('/user/{id}', 'Api\UserController@getUser');
+
+// 認証チェック
+Route::get('/auth_check', 'Api\UserController@checkAuth');
+
+// タイムライン取得
+Route::get('/timeline', 'Api\UserController@getTimeline');
+
+// ポスト詳細
+Route::get('/post/{id}', 'Api\PostController@getPost');
+
+// お気に入りされてるか
+Route::get('/post/fav/{id}', 'Api\FavoriteController@isFavorite');
+
+// プロフィール
+Route::post('/profile/{id}', 'Api\UserController@profile');
+
+// フォロイー
+Route::get('/followee/{id}', 'Api\FollowingController@getFollowees');
+
+// フォロワー
+Route::get('/follower/{id}', 'Api\FollowingController@getFollowers');
+
+// フォローしているか
+Route::get('/following/{id}', 'Api\FollowingController@isFollowing');
+
+// お気に入り一覧
+Route::get('/favorite/{id}', 'Api\UserController@getFavoritePosts');
+
+// パスワード変更
+Route::post('/password/change/', 'Api\UserController@changePassword');

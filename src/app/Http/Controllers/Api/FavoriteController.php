@@ -37,4 +37,27 @@ class FavoriteController extends Controller
             'is_delete_favo' => $delete_favo,
         ], 201);
     }
+
+    public function isFavorite($post_id)
+    {
+        if (!$user = Auth::user()) {
+            return response(['auth' => false], 401);
+        }
+
+        $isFavorite = false;
+        $where = [
+            'user_id' => $user->id,
+            'post_id' => $post_id
+        ];
+
+        if ($favorite = Favorite::where($where)->first()) {
+            if ($favorite instanceof Favorite) {
+                $isFavorite = true;
+            }
+        }
+
+        return response([
+            'is_favorite' => $isFavorite,
+        ], 200);
+    }
 }

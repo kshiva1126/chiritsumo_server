@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'image_path',
+        'name', 'email', 'password', 'image_path', 'description',
     ];
 
     /**
@@ -46,12 +46,17 @@ class User extends Authenticatable
 
     public function favorite_posts()
     {
-        return $this->belongsToMany(Post::class, 'favorites', 'user_id', 'post_id');
+        return $this
+            ->belongsToMany(Post::class, 'favorites', 'user_id', 'post_id')
+            ->withPivot(['created_at', 'updated_at', 'id'])
+            ->orderBy('pivot_updated_at', 'desc')
+            ->orderBy('pivot_created_at', 'desc')
+            ->orderBy('pivot_id', 'desc');
     }
 
     public function followees()
     {
-        return $this->belongsToMany(User::class, 'followings', 'user_id', 'following_user_id');
+        return $this ->belongsToMany(User::class, 'followings', 'user_id', 'following_user_id');
     }
 
     public function followers()

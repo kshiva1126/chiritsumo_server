@@ -17,20 +17,21 @@ class PostsTableSeeder extends Seeder
         DB::table('posts')->truncate();
         $faker = Faker::create('en_US');
 
-        for ($i = 0; $i < 5; $i++) {
-            $created_at = $faker->dateTime;
-            $updated_at = $faker->dateTime;
-            while ($created_at > $updated_at) {
+        for ($h = 1; $h < 4; $h++) {
+            for ($i = 0; $i < 5; $i++) {
+                $created_at = $faker->dateTime;
                 $updated_at = $faker->dateTime;
+                while ($created_at > $updated_at) {
+                    $updated_at = $faker->dateTime;
+                }
+                Post::create([
+                    "title" => $faker->text(20),
+                    "content" => $faker->text(100),
+                    "writer_id" => $h,
+                    "created_at" => $created_at,
+                    "updated_at" => $updated_at,
+                ]);
             }
-
-            Post::create([
-                "title" => $faker->text(20),
-                "content" => $faker->text(100),
-                "writer_id" => 1,
-                "created_at" => $created_at,
-                "updated_at" => $updated_at,
-            ]);
         }
     }
 }

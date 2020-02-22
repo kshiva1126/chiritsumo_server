@@ -8,6 +8,7 @@ use App\Post;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditRequest;
 use App\Http\Requests\PostRequest;
+use App\User;
 
 class PostController extends Controller
 {
@@ -16,11 +17,6 @@ class PostController extends Controller
         if (!$user = Auth::user()) {
             return response(['auth' => false], 401);
         }
-
-        $this->validate($request, [
-            'title' => ['required', 'string', 'max:255'],
-            'content' => ['required', 'string'],
-        ]);
 
         $data = $request->all();
 
@@ -49,18 +45,12 @@ class PostController extends Controller
         return response($post, 201);
     }
 
-    public function timeline(Request $request)
+    public function getPost($id)
     {
-        if (!$user = Auth::user()) {
-            return response(['auth' => false], 401);
-        }
-
-        $timelinePosts = [];
-        $followees = $user->followees;
-        foreach ($followees as $followee) {
-            $timelinePosts[] = $followee->posts;
-        }
-
-        return response($timelinePosts, 200);
+        $post = Post::find($id);
+        $user = User::find($post->writer_id);
+        return response(array_merge($post->toArray(), [
+            'writer_name' => $user['name'],
+        ]), 200);
     }
 }
