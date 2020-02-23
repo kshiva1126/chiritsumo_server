@@ -29,6 +29,7 @@ package "開発対象システム" as target_system {
     email: string
     password: string
     image_path: string
+    discription: string
   }
 
   entity "ポスト" as post {
