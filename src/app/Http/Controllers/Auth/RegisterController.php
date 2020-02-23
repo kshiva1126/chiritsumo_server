@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -52,7 +53,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
     }
 
@@ -68,6 +69,29 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'description' => $data['description'],
         ]);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        $this->upload($request, $user);
+        return response($user, 201);
+    }
+
+    public function upload(Request $request, User $user)
+    {
+        $rules = [
+            'file',
+            'image',
+            'mimes:jpeg, png',
+            'dimensions:min_width=120,min_height=120,max_width=400,max_height=400',
+        ];
+        $this->validate($request, $rules);
+        if ($request->hasFile('image') && $request->file('image')->isValid([])) {
+            $filename = $request->file('image')->store('public/images');
+            $user->image_path = basename($filename);
+            $user->save();
+        }
     }
 }
