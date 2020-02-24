@@ -55,7 +55,7 @@ Route::get('/post/{id}', 'Api\PostController@getPost');
 Route::get('/post/fav/{id}', 'Api\FavoriteController@isFavorite');
 
 // プロフィール
-Route::post('/profile/{id}', 'Api\UserController@profile');
+Route::post('/profile', 'Api\UserController@profile');
 
 // フォロイー
 Route::get('/followee/{id}', 'Api\FollowingController@getFollowees');
