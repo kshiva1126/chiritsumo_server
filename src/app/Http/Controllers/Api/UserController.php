@@ -196,4 +196,14 @@ class UserController extends Controller
 
         return response([], 201);
     }
+
+    public function getUsersForSearch()
+    {
+        return response(array_map(function ($user) {
+            return [
+                $user['id'],
+                $user['name'],
+            ];
+        }, User::all()->toArray()), 200);
+    }
 }
