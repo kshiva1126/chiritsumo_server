@@ -197,13 +197,40 @@ class UserController extends Controller
         return response([], 201);
     }
 
-    public function getUsersForSearch()
+    public function getUsersForSearch(Request $request)
     {
-        return response(array_map(function ($user) {
+        $keyword = $request->request->get('keyword');
+        $users = User::where('name', 'LIKE', "%{$keyword}%")->get()->toArray();
+        $isFollowed = $this->isFollowed();
+        return response(array_map(function ($user) use ($isFollowed) {
+            $result = is_array($isFollowed) && in_array($user['id'], $isFollowed) ? true : false;
             return [
-                $user['id'],
-                $user['name'],
+                'id' => $user['id'],
+                'name' => $user['name'],
+                'image_path' => $user['image_path'],
+                'description' => $user['description'],
+                'is_followed' => $result,
             ];
-        }, User::all()->toArray()), 200);
+        }, $users), 200);
+    }
+
+    private function isFollowed()
+    {
+        $isFollowed = false;
+        $loginUser = Auth::user();
+        if (!$loginUser) {
+            return $isFollowed;
+        }
+
+        $loginUserFollowers = $loginUser->followers;
+        foreach ($loginUserFollowers as $loginUserFollower) {
+            if (!$loginUserFollower instanceof User) {
+                return $isFollowed;
+            }
+        }
+
+        return array_map(function ($loginUserFollower) {
+            return $loginUserFollower['id'];
+        }, $loginUserFollowers->toArray());
     }
 }
