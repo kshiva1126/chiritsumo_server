@@ -40,7 +40,7 @@ Route::post('/fav', 'Api\FavoriteController@fav');
 Route::post('/following', 'Api\FollowingController@following');
 
 // 会員検索
-Route::get('/user/all', 'Api\UserController@getUsersForSearch');
+Route::post('/user/search', 'Api\UserController@getUsersForSearch');
 
 // ユーザ
 Route::get('/user/{id}', 'Api\UserController@getUser');
