@@ -21,7 +21,10 @@ class FollowingController extends Controller
         $data = $request->all();
 
         $defollowing= false;
-        if ($following = Following::where($data)->first()) {
+        if ($following = Following::where([
+            'user_id' => $user->id,
+            'following_user_id' => $data['following_user_id'],
+        ])->first()) {
             if ($following instanceof Following) {
                 $following->delete();
                 $defollowing = true;
