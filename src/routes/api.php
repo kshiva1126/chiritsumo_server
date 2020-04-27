@@ -19,25 +19,25 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // 会員登録
-Route::post('/register', 'Auth\RegisterController@register');
+Route::post('/register', 'Auth\RegisterController@register')->name('register');
 
 // ログイン
-Route::post('/login', 'Auth\LoginController@login');
+Route::post('/login', 'Auth\LoginController@login')->name('login');
 
 // ログアウト
-Route::post('/logout', 'Auth\LoginController@logout');
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 // 記事投稿
-Route::post('/post', 'Api\PostController@post');
+Route::post('/post', 'Api\PostController@post')->name('post');
 
 // 記事編集
-Route::post('/edit', 'Api\PostController@edit');
+Route::post('/edit', 'Api\PostController@edit')->name('edit');
 
 // 記事お気に入り
 Route::post('/fav', 'Api\FavoriteController@fav');
 
 // フォロウィング
-Route::post('/following', 'Api\FollowingController@following');
+Route::post('/following', 'Api\FollowingController@following')->name('following');
 
 // 会員検索
 Route::post('/user/search', 'Api\UserController@getUsersForSearch');
@@ -61,13 +61,13 @@ Route::get('/post/fav/{id}', 'Api\FavoriteController@isFavorite');
 Route::post('/profile', 'Api\UserController@profile');
 
 // フォロイー
-Route::get('/followee/{id}', 'Api\FollowingController@getFollowees');
+Route::get('/followee/{id}', 'Api\FollowingController@getFollowees')->name('followee');
 
 // フォロワー
 Route::get('/follower/{id}', 'Api\FollowingController@getFollowers');
 
 // フォローしているか
-Route::get('/following/{id}', 'Api\FollowingController@isFollowing');
+Route::get('/following/{id}', 'Api\FollowingController@isFollowing')->name('is_following');
 
 // お気に入り一覧
 Route::get('/favorite/{id}', 'Api\UserController@getFavoritePosts');
