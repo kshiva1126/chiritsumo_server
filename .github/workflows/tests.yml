@@ -49,7 +49,7 @@ jobs:
 
       - name: Run docker-php-ext-configure
         run: |
-          docker-php-ext-configure gd
+          docker-php-ext-configure gd \
           --with-freetype=/usr/include/ \
           --with-jpeg=/usr/include/
 
