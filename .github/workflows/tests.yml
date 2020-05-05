@@ -44,9 +44,6 @@ jobs:
           libjpeg-dev \
           libpng-dev
 
-      - name: zip
-        run: zip --help
-
       - name: Run docker-php-ext-configure
         run: |
           docker-php-ext-configure gd \
