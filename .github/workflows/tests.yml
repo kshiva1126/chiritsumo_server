@@ -63,7 +63,7 @@ jobs:
 
       - name: Prepare Laravel Application
         run: |
-          cp .env.example .env
+          cp .env.sample .env
           php artisan key:generate
         working-directory: src
 
