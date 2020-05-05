@@ -65,6 +65,12 @@ jobs:
           php artisan key:generate
         working-directory: src
 
+      - name: Php modules
+        run: php -m
+
+      - name: gd_info
+        run: php -r "var_dump(gd_info())";
+
       - name: Run tests
         run: ./vendor/bin/phpunit
         working-directory: src
