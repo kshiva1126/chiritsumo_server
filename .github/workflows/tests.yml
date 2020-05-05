@@ -56,8 +56,6 @@ jobs:
       - name: Run docker-php-ext-configure
         run: |
           docker-php-ext-configure gd
-          # --with-freetype=/usr/include/ \
-          # --with-jpeg=/usr/include/
 
       - name: Cache composer dependencies
         uses: actions/cache@v1.1.0
