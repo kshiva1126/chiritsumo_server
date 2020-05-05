@@ -24,6 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2.0.0
 
+      - name: Install composer
+      run: |
+        cd /usr/bin
+        curl -s http://getcomposer.org/installer | php
+        ln -s /usr/bin/composer.phar /usr/bin/composer
+
       - name: Run apt-get install
         run: |
           apt-get update
@@ -31,6 +37,7 @@ jobs:
           git \
           zip \
           unzip \
+          gcc \
           libpq-dev \
           libfreetype6-dev \
           libjpeg62-turbo-dev \
@@ -48,15 +55,10 @@ jobs:
 
       - name: Run docker-php-ext-configure
         run: |
-          docker-php-ext-configure gd \
-          --with-freetype=/usr/include/ \
-          --with-jpeg=/usr/include/
+          docker-php-ext-configure gd
+          # --with-freetype=/usr/include/ \
+          # --with-jpeg=/usr/include/
 
-      - name: Install composer
-        run: |
-          cd /usr/bin
-          curl -s http://getcomposer.org/installer | php
-          ln -s /usr/bin/composer.phar /usr/bin/composer
       - name: Cache composer dependencies
         uses: actions/cache@v1.1.0
         with:
