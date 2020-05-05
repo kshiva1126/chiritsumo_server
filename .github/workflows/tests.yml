@@ -36,11 +36,14 @@ jobs:
           libjpeg-dev \
           libpng-dev
 
+      - name: zip
+        run: zip --help
+
       - name: Run docker-php-ext-
         run: |
           docker-php-ext-install pdo_mysql
-          docker-php-ext-install -j$(nproc) iconv
-          docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
+          && docker-php-ext-install -j$(nproc) iconv
+          && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
 
       - name: Install composer
         run: |
