@@ -39,11 +39,14 @@ jobs:
       - name: zip
         run: zip --help
 
-      - name: Run docker-php-ext-
+      - name: Run docker-php-ext-install
         run: |
           docker-php-ext-install \
           pdo_mysql \
           iconv
+
+      - name: Run docker-php-ext-configure
+        run: |
           docker-php-ext-configure \
           gd \
           --with-freetype=/usr/include/ \
