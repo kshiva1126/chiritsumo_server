@@ -41,9 +41,6 @@ jobs:
           docker-php-ext-install pdo_mysql
           docker-php-ext-install -j$(nproc) iconv
           docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
-           
-      - name: gd_info
-        run: php -r "var_dump(gd_info());"
 
       - name: Install composer
         run: |
