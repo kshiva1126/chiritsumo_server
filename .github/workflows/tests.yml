@@ -25,10 +25,10 @@ jobs:
       - uses: actions/checkout@v2.0.0
 
       - name: Install composer
-      run: |
-        cd /usr/bin
-        curl -s http://getcomposer.org/installer | php
-        ln -s /usr/bin/composer.phar /usr/bin/composer
+        run: |
+          cd /usr/bin
+          curl -s http://getcomposer.org/installer | php
+          ln -s /usr/bin/composer.phar /usr/bin/composer
 
       - name: Run apt-get install
         run: |
