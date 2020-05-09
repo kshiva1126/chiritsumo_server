@@ -17,9 +17,10 @@ jobs:
         working-directory: src
 
       - name: Generate ssh key
-        run: echo "${DEPLOY_KEY}" > id_rsa && chmod 600 key
+        run: echo "${DEPLOY_KEY}" > id_rsa && chmod 600 id_rsa
         env:
           DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        working-directory: src
 
       - name: Sync
         run: |
