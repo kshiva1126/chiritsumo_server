@@ -32,4 +32,4 @@ jobs:
         env:
           DEST_PATH: ${{ secrets.DEST_PATH }}
           PORT: ${{ secrets.PORT }}
-        work-directory: src
+        working-directory: src
