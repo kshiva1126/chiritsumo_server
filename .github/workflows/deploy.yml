@@ -20,6 +20,7 @@ jobs:
         run: echo "${DEPLOY_KEY}" > id_rsa && chmod 600 id_rsa
         env:
           DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+        working-directory: src
 
       - name: Sync
         run: |
