@@ -37,10 +37,12 @@ class PostController extends Controller
 
         $data = $request->all();
 
-        $post = Post::where('id', $data['post_id'])->update([
+        Post::where('id', $data['post_id'])->update([
             'title' => $data['title'],
             'content' => $data['content'],
         ]);
+
+        $post = Post::find($data['post_id']);
 
         return response($post, 201);
     }

@@ -1,0 +1,87 @@
+name: Tests
+on: push
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: ga_test
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    container:
+        image: php:7.4-fpm
+        env:
+          DB_CONNECTION: ga_testing
+
+    steps:
+      - uses: actions/checkout@v2.0.0
+
+      - name: Install composer
+        run: |
+          cd /usr/bin
+          curl -s http://getcomposer.org/installer | php
+          ln -s /usr/bin/composer.phar /usr/bin/composer
+
+      - name: Run apt-get install
+        run: |
+          apt-get update
+          apt-get install -y \
+          git \
+          zip \
+          unzip \
+          gcc \
+          libpq-dev \
+          libfreetype6-dev \
+          libjpeg62-turbo-dev \
+          libjpeg-dev \
+          libpng-dev
+
+      - name: Run docker-php-ext-configure
+        run: |
+          docker-php-ext-configure gd \
+          --with-freetype=/usr/include/ \
+          --with-jpeg=/usr/include/
+
+      - name: Run docker-php-ext-install
+        run: |
+          docker-php-ext-install \
+          pdo_mysql \
+          iconv \
+          gd
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v1.1.0
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('src/composer.lock') }}
+
+      - name: Run composer install
+        run: composer install -n --prefer-dist
+        env:
+          APP_ENV: testing
+        working-directory: src
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.sample .env
+          php artisan key:generate
+        working-directory: src
+
+      - name: Run tests
+        run: ./vendor/bin/phpunit
+        working-directory: src
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: Logs
+          path: ./src/storage/logs
