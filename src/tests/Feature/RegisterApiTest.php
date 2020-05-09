@@ -78,11 +78,11 @@ class RegisterApiTest extends TestCase
         $this->assertEquals($data['name'], $user->name);
 
         $response
-        ->assertStatus(201)
-        ->assertJson([
-            'name' => $user->name,
-            'image_path' => $user->image_path,
-        ]);
+            ->assertStatus(201)
+            ->assertJsonFragment([
+                'name' => $user->name,
+                'image_path' => $user->image_path,
+            ]);
     }
 
     public function providerRequired()

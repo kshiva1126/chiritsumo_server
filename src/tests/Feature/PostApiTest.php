@@ -79,7 +79,7 @@ class PostApiTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJson([
+            ->assertJsonFragment([
                 'title' => $post->title,
                 'content' => $post->content,
             ]);
@@ -110,7 +110,7 @@ class PostApiTest extends TestCase
 
         $response
             ->assertStatus(201)
-            ->assertJson([
+            ->assertJsonFragment([
                 'title' => $edit->title,
                 'content' => $edit->content,
             ]);
