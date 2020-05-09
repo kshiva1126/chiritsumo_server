@@ -1,0 +1,35 @@
+name: Deploy server
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy server
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.0.0
+
+      - name: Run composer install
+        run: composer install --prefer-dist --no-dev
+        working-directory: src
+
+      - name: Generate ssh key
+        run: echo "${DEPLOY_KEY}" > id_rsa && chmod 600 key
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Sync
+        run: |
+          rsync --dry-run -chav --delete \
+          -e "ssh -i ./id_rsa -p ${PORT}
+          -o UserKnownHostsFile=/dev/null \
+          -o StrictHostKeyChecking=no" \
+          --exclude /id_rsa \
+          . "${DEST_PATH}"
+        env:
+          DEST_PATH: ${{ secrets.DEST_PATH }}
+          PORT: ${{ secrets.PORT }}
+        work-directory: src
