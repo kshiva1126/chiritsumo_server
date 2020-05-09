@@ -29,5 +29,5 @@ jobs:
           . "$DEST_PATH"
         env:
           DEST_PATH: ${{ secrets.DEST_PATH }}
-          PORT: ${{ secrets.PORT }}
+          PORT: 22
         working-directory: src
