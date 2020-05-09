@@ -22,12 +22,12 @@ jobs:
       - name: Sync
         run: |
           rsync --dry-run -chav --delete \
-          -e "ssh -i ./id_rsa -p ${PORT} \
-          -o UserKnownHostsFile=/dev/null \
-          -o StrictHostKeyChecking=no" \
+          -e "ssh -i ./id_rsa -p $PORT \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null" \
           --exclude-from=.rsyncignore \
           . "$DEST_PATH"
         env:
-          DEST_PATH: ${{ secrets.DEST_PATH }}
           PORT: ${{ secrets.PORT }}
+          DEST_PATH: ${{ secrets.DEST_PATH }}
         working-directory: src
