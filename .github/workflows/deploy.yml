@@ -1,8 +1,5 @@
 name: Deploy server
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
   deploy:
@@ -17,7 +14,7 @@ jobs:
         working-directory: src
 
       - name: Generate ssh key
-        run: echo "${DEPLOY_KEY}" > id_rsa && chmod 600 id_rsa
+        run: echo "$DEPLOY_KEY" > id_rsa && chmod 600 id_rsa
         env:
           DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
         working-directory: src
@@ -25,11 +22,11 @@ jobs:
       - name: Sync
         run: |
           rsync --dry-run -chav --delete \
-          -e "ssh -i ./id_rsa -p ${PORT}
+          -e "ssh -i ./id_rsa -p $PORT
           -o UserKnownHostsFile=/dev/null \
           -o StrictHostKeyChecking=no" \
-          --exclude /id_rsa \
-          . "${DEST_PATH}"
+          --exclude-from=.rsyncignore \
+          . "$DEST_PATH"
         env:
           DEST_PATH: ${{ secrets.DEST_PATH }}
           PORT: ${{ secrets.PORT }}
