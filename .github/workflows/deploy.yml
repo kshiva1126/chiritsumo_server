@@ -9,9 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2.0.0
 
-      - name: Run composer install
-        run: composer install --prefer-dist --no-dev
-        working-directory: src
+      # - name: Run composer install
+      #   run: composer install --prefer-dist --no-dev
+      #   working-directory: src
 
       # - name: Generate ssh key
       #   run: echo "$DEPLOY_KEY" > id_rsa && chmod 600 id_rsa
