@@ -58,7 +58,7 @@ class FollowingApiTest extends TestCase
         // フォローしたのでfalseが返る
         $response
             ->assertStatus(201)
-            ->assertJson([
+            ->assertJsonFragment([
                 'is_defollowing' => false,
             ]);
 
@@ -79,7 +79,9 @@ class FollowingApiTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson([['name' => $this->followee->name]]);
+            ->assertJsonFragment([
+                'name' => $this->followee->name
+            ]);
     }
 
     public function フォローしている()
@@ -90,7 +92,7 @@ class FollowingApiTest extends TestCase
 
         $request
             ->assertStatus(200)
-            ->assertJson([
+            ->assertJsonFragment([
                 'is_following' => true,
             ]);
     }
@@ -107,7 +109,7 @@ class FollowingApiTest extends TestCase
 
         $request
             ->assertStatus(200)
-            ->assertJson([
+            ->assertJsonFragment([
                 'is_following' => false,
             ]);
     }

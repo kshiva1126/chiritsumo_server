@@ -34,7 +34,7 @@ Route::post('/post', 'Api\PostController@post')->name('post');
 Route::post('/edit', 'Api\PostController@edit')->name('edit');
 
 // 記事お気に入り
-Route::post('/fav', 'Api\FavoriteController@fav');
+Route::post('/fav', 'Api\FavoriteController@fav')->name('fav');
 
 // フォロウィング
 Route::post('/following', 'Api\FollowingController@following')->name('following');
