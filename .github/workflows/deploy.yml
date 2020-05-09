@@ -9,35 +9,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2.0.0
 
-      # - name: Run composer install
-      #   run: composer install --prefer-dist --no-dev
-      #   working-directory: src
-
-      # - name: Generate ssh key
-      #   run: echo "$DEPLOY_KEY" > id_rsa && chmod 600 id_rsa
-      #   env:
-      #     DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
-      #   working-directory: src
+      - name: Run composer install
+        run: composer install --prefer-dist --no-dev
+        working-directory: src
 
       - name: Generate ssh key
-        run: echo "$FAKE_DEPLOY_KEY" > id_rsa && chmod 600 id_rsa
+        run: echo "$DEPLOY_KEY" > id_rsa && chmod 600 id_rsa
         env:
-          FAKE_DEPLOY_KEY: ${{ secrets.FAKE_DEPLOY_KEY }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
         working-directory: src
 
-      - name: cat
-        run: cat ./id_rsa
+      - name: Sync
+        run: |
+          rsync --dry-run -chav --delete \
+          -e "ssh -i ./id_rsa -p ${PORT} \
+          -o UserKnownHostsFile=/dev/null \
+          -o StrictHostKeyChecking=no" \
+          --exclude-from=.rsyncignore \
+          . "$DEST_PATH"
+        env:
+          DEST_PATH: ${{ secrets.DEST_PATH }}
+          PORT: ${{ secrets.PORT }}
         working-directory: src
-
-      # - name: Sync
-      #   run: |
-      #     rsync --dry-run -chav --delete \
-      #     -e "ssh -i ./id_rsa -p $PORT \
-      #     -o UserKnownHostsFile=/dev/null \
-      #     -o StrictHostKeyChecking=no" \
-      #     --exclude-from=.rsyncignore \
-      #     . "$DEST_PATH"
-      #   env:
-      #     DEST_PATH: ${{ secrets.DEST_PATH }}
-      #     PORT: ${{ secrets.PORT }}
-      #   working-directory: src
