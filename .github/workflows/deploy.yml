@@ -1,5 +1,8 @@
 name: Deploy server
-on: push
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   deploy:
@@ -21,7 +24,7 @@ jobs:
 
       - name: Sync
         run: |
-          rsync --dry-run -chav --delete \
+          rsync -chav --delete \
           -e "ssh -i ./id_rsa -p $PORT \
           -o StrictHostKeyChecking=no \
           -o UserKnownHostsFile=/dev/null" \
